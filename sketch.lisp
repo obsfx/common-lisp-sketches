@@ -15,13 +15,20 @@
 
 ; multiple value return
 (defun vector2d (x y)
-  (list x y))
+  (values x y))
 
-(defvar *vector* (vector2d 5 10))
+
+(defvar *vector* (multiple-value-bind (x y)
+    (vector2d 5 1)
+  (list x y)))
 
 ; get first element of list
+(print-line "--------")
 (print-line (nth 0 *vector*))
+(print-line (nth 1 *vector*))
 (print-line (car *vector*))
+(print-line (cdr *vector*))
+(print-line "--------")
 
 ; car
 ; It takes a list as argument, and returns its first element.
@@ -46,7 +53,6 @@
 ; 
 ; reverse
 ; It takes a list and returns a list with the top elements in reverse order.
-
 (defun multiply (numbers)
   (if (> (length numbers) 0)
       (* (car numbers) (multiply (cdr numbers)))
@@ -54,3 +60,50 @@
 
 (print-line (multiply (list 2 4 8 10 20)))
 
+; local variables
+(print-line "--------")
+(let ((x 1)
+      (y 2)
+      (z 3))
+  (print-line (multiply (list x y z))))
+
+; define variables whose initial values depend on previous variables
+(print-line "--------")
+(let* ((x 1)
+      (y (+ x 2))
+      (z (+ x 4)))
+  (print-line (multiply (list x y z))))
+
+; Dynamic variables are sort of like global variables, but more useful: they are dynamically scoped. You define them either with defvar or defparameter, the differences being:
+;   defparameter requires an initial value, defvar does not.
+;   defparameter variables are changed when code is reloaded with a new initial value, defvar variables are not.
+(print-line "--------")
+(defparameter *defp* "defparameter")
+
+(defun print-globalvar ()
+  (print-line *defp*))
+
+(print-globalvar)
+
+(let ((*defp* "defparameter reloaded in local"))
+  (print-globalvar))
+
+(defvar *defv* "defvar")
+
+(defun print-globalvar ()
+  (print-line *defv*))
+
+(print-globalvar)
+
+(let ((*defv* "defvar reloaded in local"))
+  (print-globalvar))
+
+(defparameter *defp* "defparameter reloaded in global")
+(defvar *defv* "defvar reloaded in global") 
+(print-line *defp*)
+(print-line *defv*)
+
+; modifying list
+(defparameter numbers (list 1 2 3 4))
+(setf (nth 2 numbers) 80)
+(print-line numbers)
