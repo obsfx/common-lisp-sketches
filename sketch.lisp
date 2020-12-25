@@ -139,3 +139,12 @@
 ; which is denoted by the name or by the lambda expression. It returns 
 ; the function object as a value. With this special operator one can access 
 ; the function object from global functions and lexical functions.
+
+; progn
+; The general purpose special operator progn is used for evaluating zero 
+; or more forms. 
+; 
+; (progn
+;   (print 'hello)
+;   (values 1 2 3))
+;;=> 1, 2, 3
