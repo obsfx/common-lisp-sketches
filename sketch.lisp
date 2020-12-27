@@ -143,8 +143,43 @@
 ; progn
 ; The general purpose special operator progn is used for evaluating zero 
 ; or more forms. 
-; 
-; (progn
-;   (print 'hello)
-;   (values 1 2 3))
-;;=> 1, 2, 3
+(defun progn-test ()
+  (progn 
+    (print-line "test")
+    (print-line "test2")
+    (print-line "test3")))
+
+; hex to integer
+(print-line (parse-integer "5E" :radix 16))
+
+; integer to hex
+(print-line (write-to-string 60 :base 16))
+
+; getting argv for SBCL
+(defparameter argv *posix-argv*)
+
+; reading file line by line
+(with-open-stream 
+    (stream
+      "./sketch.lisp"
+      :if-does-not-exist nil)
+  (if stream
+      (loop for line = (read-line stream nil nil)
+            while line
+            collect line)))
+
+; reading file byte by byte
+(with-open-stream 
+    (stream
+      "./sketch.lisp"
+      :element-type '(unsigned-byte 8)
+      :if-does-not-exist nil)
+  (if stream
+      (loop for byte = (read-byte stream nil nil)
+            while byte
+            collect byte)))
+
+; check var exist
+(if (boundp 'test-var) 
+    (print-line "variable defined")
+    (print-line "undefined variable"))
